@@ -1,0 +1,39 @@
+<?php
+/**
+ * @file
+ * Code for the tsitaatcom_migrate_help feature.
+ */
+
+include_once 'tsitaatcom_migrate_help.features.inc';
+
+/**
+ * Implements hook_menu().
+ */
+function tsitaatcom_migrate_help_menu() {
+  $items = array();
+
+  $items['admin/tsitaatcom_migrate_help'] = array(
+    'title' => 'Migrate help',
+    'page callback' => 'tsitaatcom_migrate_help_callback',
+    'access arguments' => array('access administration pages'),
+  );
+
+  return $items;
+}
+
+/**
+ * Admin/filter-phpbb-users page callback.
+ *
+ * 7549 hetkel viimane kasutaja.
+ */
+function tsitaatcom_migrate_help_callback() {
+
+
+  db_set_active('tsitaatcom');
+  $results = db_query('SELECT  `id` FROM `old_tsitaat_com`.`a_tsitaatcom2_quotes` ORDER BY `id` DESC LIMIT 1')->fetchAll(PDO::FETCH_ASSOC);
+  db_set_active();
+
+  $out = 'Sa pead genereerima ' . $results[0]['id']. ' "Migrate help" tüüpi node\'i. ' . l('Link', 'admin/config/development/generate/content');
+
+  return $out;
+}
